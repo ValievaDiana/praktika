@@ -41,7 +41,7 @@ class ConsoleServerApp:
 def parse_and_run():
     def parse_args():
         parser = ArgumentParser(description="Server settings")
-        parser.add_argument("--addr", default="127.0.0.1", type=str)
+        parser.add_argument("--addr", default="127.ё0.0.1", type=str)
         parser.add_argument("--port", default=PORT, type=int)
         parser.add_argument('--nogui', action='store_true')
         print(parser.parse_args())
