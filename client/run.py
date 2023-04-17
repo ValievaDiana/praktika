@@ -88,3 +88,59 @@ def parse_and_run():
 
 if __name__ == '__main__':
     parse_and_run()
+
+from client.ui.windows import ContactsWindow
+from PyQt5.QtWidgets import QApplication, QDialog
+class GuiClientApp:
+    ...
+    def main(self):
+        # create event loop
+        app = QApplication(argv)
+        loop = QEventLoop(app)
+
+        set_event_loop(loop)    # NEW must set the event loop
+
+    # authentication process
+
+        auth_ = ClientAuth(db_path=self.db_path)
+        login_wnd = LoginWindow(auth_instance=auth_)
+        auth_ = ClientAuth(db_path=self.db_path)
+        login_wnd = LoginWindow(auth_instance=auth_)
+        if login_wnd.exec_() == QDialog.Accepted:
+            client_ = ChatClientProtocol(db_path=self.db_path,
+                                        loop=loop,
+                                        username=login_wnd.username,
+                                        password=login_wnd.password)
+            wnd = ContactsWindow(client_instance=client_,
+                                    user_name=login_wnd.username)
+            client_.gui_instance = wnd
+
+            with loop:
+                del auth_
+                del login_wnd
+                try:
+                    coro = loop.create_connection(lambda: client_,
+                                        self.args["addr"],
+                                            self.args["port"])
+                    server = loop.run_until_complete(coro)
+                except ConnectionRefusedError:
+                    print('Error. wrong server')
+                    exit(1)
+                wnd.show()
+                client_.get_from_gui()
+                try:
+                    loop.run_forever()
+                except KeyboardInterrupt:
+                    pass
+                except Exception:
+                    pass
+
+wnd = ContactsWindow(client_instance=client_,
+                    user_name=login_wnd.username)
+client_.gui_instance = wnd
+with loop:
+    ...
+    wnd.show()
+
+wnd.show()
+client_.get_from_gui()
