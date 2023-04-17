@@ -58,3 +58,6 @@ def parse_and_run():
 
 if __name__ == '__main__':
     parse_and_run()
+
+wnd = ServerMonitorWindow(server_instance=self.ins, parsed_args=self.args)
+wnd.show()
